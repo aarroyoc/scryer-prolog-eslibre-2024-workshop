@@ -1,0 +1,236 @@
+#+TITLE: Scryer Prolog esLibre 2024 Workshop
+#+AUTHOR: Adrián Arroyo Calle
+#+EMAIL: adrian.arroyo.calle@uva.es
+#+DATE: Mayo 2024
+#+LANGUAGE: es
+#+OPTIONS:   H:2 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+latex_header: \mode<beamer>{\usetheme{JuanLesPins}}
+
+* Introducción
+
+** ~$whoami~
+
+*** 
+:PROPERTIES:
+:BEAMER_col: 0.6
+:END:
+- Adrián Arroyo Calle
+- [[https://castilla.social/@aarroyoc][@aarroyoc@castilla.social]]
+- [[https://adrianistan.eu][https://adrianistan.eu]]
+- Desarrollador backend en Telefónica Innovación Digital
+- Colaborador en Scryer Prolog
+
+*** 
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
+#+ATTR_LaTeX: :width \textwidth
+[[file:Adrian.jpg]]
+
+* ¿Qué es la programación lógica?
+
+** 
+¿No es todo tipo de programación un *pensamiento lógico*?
+
+¿Cuál es la diferencia entonces entre la *programación lógica* y el resto de tipos?
+
+** Paradigmas de programación
+
+En progrmación existen diferentes paradigmas. En cada paradigma tenemos que pensar de forma diferente.
+
+- Programación imperativa
+  - Fundamento teórico: la máquina de Turing.
+  - Lenguajes: C, Pascal, Go, ...
+- Programación funcional
+  - Fundamento teórico: el cálculo lambda de Alonzo Church.
+  - Lenguajes: Haskell, Scheme, Idris, ...
+- Programación lógica
+  - Fundamento teórico: la lógica de predicados.
+  - Lenguajes: *Prolog*, Mercury, ...
+
+Adicionalmente tendríamos otros paradigmas como *concatenativo*, *arrays* y paradigmas /complementarios/ como
+orientado a objetos y reactivo.
+
+** Lógica de Aristóteles
+
+El primer tratamiento sofisticado de la lógica lo encontramos en Aristóteles, con su Órganon.
+La idea fundamental es que existen proposiciones, que son cosas que pueden ser ciertas o falsas se dan tres axiomas:
+- Principio de no contradicción
+- Principio de identidad
+- Principio del tercero excluido
+
+Mediante el silogismo podemos obtener conocimiento deductivo (razonando). En contraposición existe el conocimiento
+inductivo (mediante la experiencia, típico de la ciencia).
+
+** Lógica de predicados
+
+La lógica de Aristóteles fue muy estudiada durante la Edad Media por árabes y cristianos.
+
+Pero posteriormente fueron encontrándose limitaciones. Un estudio más sistemático fue necesario.
+
+La lógica de predicados añade expresividad, al introducir el concepto de *variables*.
+
+** Ejemplo
+
+- Sócrates es humano.
+- Todos los humanos son mortales.
+
+Definimos:
+- H(x) : X es humano
+- M(x) : X es mortal
+- soc : Sócrates
+
+Lógica:
+
+\begin{equation}
+H(soc)
+\end{equation}
+\begin{equation}
+\forall x \, H(x) \implies M(x)
+\end{equation}
+
+Deducimos $M(soc)$ por modus tollens
+
+* Prolog
+
+** Sócrates en Prolog
+
+*** Código
+#+begin_src prolog
+human(socrates).
+mortal(X) :- human(X).
+#+end_src
+
+*** Terminal
+
+#+begin_src shell
+  scryer-prolog socrates.pl
+  ?- mortal(socrates).
+     true.
+  ?- mortal(X).
+     X = socrates.
+#+end_src
+
+** Prolog
+
+- Prolog nació en 1972 en Marsella (Francia) de la mano de Alain Colmerauer, Philippe Roussel y Bob Kowalski.
+- Estandarizado como ISO Prolog en 1995.
+- La idea fundamental es usar la lógica de predicados, aunque simplificada en ciertos puntos.
+- Los programas son bases de conocimiento que realizan un cómputo al razonar sobre algo que pidamos.
+- Prolog es /backward-chaining/, hay que indicarle primero lo queremos probar. Y Prolog lo intentará probar.
+- Prolog es Turing-completo. Es decir, misma potencia expresiva que lenguajes como C, JavaScript o Haskell.
+
+** Sintaxis de Prolog
+# Explicar esto con ejemplos interactivos
+
+- Las variables lógicas empiezan por letra mayúscula. Pueden adoptar cualquier valor, incluso otra variable.
+  Pero solamente una vez. Se parecen más a las variables de álgebra que a las de un lenguaje imperativo.
+- Los átomos empiezan por letra minúscula. Solo son iguales a ellos mismos.
+- Los términos compuestos se basan en un átomo y a continuación entre paréntesis, N términos más.
+- Variables, átomos y compuestos son términos.
+- En Prolog cada definición acaba con un punto.
+- Si solo hay un término, esa definición es un /fact/ o hecho.
+- Si existe una implicación, esa definición es una regla.
+- El conjunto de definiciones con el mismo átomo inicial y mismo número de argumentos (aridad) se llama *predicado*.
+  
+** Unificación
+
+Una operación clave de Prolog es la unificación. Se trata de conseguir que dos términos sean iguales.
+Para ello se aplican comprobaciones de igualdad, pero también sustitución de variables.
+
+#+begin_src prolog
+?- 10 = 10.
+   true.
+?- 10 = 10.
+   true.
+?- X = 10.
+   X = 10.
+?- X = Y.
+   X = Y.
+?- f(A, 10) = f(A, A).
+   A = 10.
+#+end_src
+
+** No determinismo
+
+La otra operación clave de Prolog es el no determinismo. Si tenemos varias reglas para un predicado, Prolog puede ir probando varias.
+En esencia es un algoritmo de búsqueda integrado dentro del lenguaje. Los caminos alternativos abiertos quedan registrados. 
+
+#+begin_src prolog
+?- [user].
+a(10).
+a(20).
+a(30).
+
+?- a(X).
+   X = 10
+;  X = 20
+;  X = 30.
+#+end_src
+   
+* Problemas
+
+** Problemas
+
+A partir de ahora vamos a ir viendo algunos problemas especialmente interesantes para resolver en Prolog.
+Usaremos Scryer Prolog ( https://scryer.pl )
+Usaremos clpz para la aritmética. Viene incluido en Scryer Prolog.
+
+** Grafo de viajes
+
+Tenemos un listado de precios de vuelos entre aeropuertos. ¿Cómo lo podemos expresar en Prolog?
+
+** 
+
+#+begin_src prolog
+vuelo(mad,bcn,200).
+vuelo(bcn,mad,100).
+vuelo(bcn,vll,30).
+vuelo(vll,bcn,30).
+vuelo(mad,vlc,50).
+vuelo(vlc,mad,50).
+#+end_src
+
+** 
+
+Si el vuelo que buscamos es justo el trayecto que tenemos registrado, funcionará perfectamente.
+Pero no funcionará si necesitamos hacer escala.
+
+**  
+
+#+begin_src prolog
+vuelo(X, Y, Precio) :-
+    vuelo(X, Z, P1),
+    vuelo(Z, Y, P2),
+    Precio #= P1+P2.
+#+end_src
+
+Añadimos una regla al predicado, en el cual, de nuestro origen vamos a un destino Z y desde ese destino Z buscamos vuelo hasta el destino real Y.
+
+¡Puede ser recursivo!
+
+**  
+
+¿Y si quiero calcular la ida y vuelta?
+
+** 
+
+#+begin_src prolog
+idavuelta(X, Y, Precio) :-
+    vuelo(X, Y, P1),
+    vuelo(Y, X, P2),
+    Precio #= P1+P2.
+#+end_src
+
+** Zebra
+
+** Buscaminas
+
+** Sudoku
+
+** Soccerdoku
