@@ -8,7 +8,6 @@ kenken(Board) :-
     Board = kenken(Size, Vars, Boxes),
     append(Vars, Vs),
     Vs ins 1..Size, % Fill the grid with numbers between 1 and GridSize
-    % maplist(box_restriction_id(Vars, Size), Boxes),
     % Do not repeat numbers on a row
     maplist(all_different, Vars),
     % Do not repeat numbers on a column
@@ -29,7 +28,7 @@ box_restriction(Vars, box(Target, sum, Nums)) :-
 box_restriction(Vars, box(Target, sub, Nums)) :-
     maplist(cell(Vars), Nums, Cells),
     Cells = [A, B],
-    #\(#A - #B #= #Target, #B - #A #= #Target).
+    #A - #B #= #Target #\ #B - #A #= #Target.
 
 box_restriction(Vars, box(Target, mul, Nums)) :-
     maplist(cell(Vars), Nums, Cells),
@@ -38,7 +37,7 @@ box_restriction(Vars, box(Target, mul, Nums)) :-
 box_restriction(Vars, box(Target, div, Nums)) :-
     maplist(cell(Vars), Nums, Cells),
     Cells = [A, B],
-    #\(#A // #B #= #Target, #B // \A #= #Target).
+    #A // #B #= #Target #\ #B // #A #= #Target.
 
 mul_cells([A], Target) :-
     #A #= Target.
