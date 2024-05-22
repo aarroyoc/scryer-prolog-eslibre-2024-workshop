@@ -42,7 +42,7 @@
 
 ** Paradigmas de programación
 
-En progrmación existen diferentes paradigmas. En cada paradigma tenemos que pensar de forma diferente.
+En programación existen diferentes paradigmas. En cada paradigma tenemos que pensar de forma diferente.
 
 - Programación imperativa
   - Fundamento teórico: la máquina de Turing.
@@ -60,7 +60,7 @@ orientado a objetos y reactivo.
 ** Lógica de Aristóteles
 
 El primer tratamiento sofisticado de la lógica lo encontramos en Aristóteles, con su Órganon.
-La idea fundamental es que existen proposiciones, que son sentencias que pueden ser ciertas o falsas se dan tres axiomas:
+La idea fundamental es que existen proposiciones, que son sentencias que pueden ser ciertas o falsas. Se dan tres axiomas:
 - Principio de no contradicción
 - Principio de identidad
 - Principio del tercero excluido
@@ -95,7 +95,7 @@ H(soc)
 \forall x \, H(x) \implies M(x)
 \end{equation}
 
-Deducimos $M(soc)$ por modus tollens
+Deducimos $M(soc)$ por modus ponens.
 
 * Prolog
 
@@ -269,7 +269,7 @@ valladolid   true.
 
 ** No determinismo
 
-- Tanto en los OR (;) como en predicados con diferentes decisiones, Prolog tiene que tomar una decisión de cuál
+- Tanto en los OR (;) como en predicados con diferentes reglas/hechos, Prolog tiene que tomar una decisión de cuál
   es el siguiente paso.
 - Estos puntos se llaman /choicepoints/. Prolog los almacena. Si queremos otra solución o si el camino que hemos tomado falla, Prolog vuelve atrás.
 
